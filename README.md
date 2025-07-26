@@ -145,7 +145,7 @@ Finds values in the payment details table with exact label matching.
 {
   "creditPartyAccountNumber": "111222",
   "payerTelebirrNo": "2519****4429",
-  "payerName": "Firiat Fisha Gebremeskel",
+  "payerName": "John Doe",
   "paymentDate": "25-07-2025 13:22:34",
   "totalPaidAmount": "63.00 Birr",
   "invoiceNumber": "CGP5Q3APB5",
