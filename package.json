@@ -1,15 +1,46 @@
 {
   "name": "@mfissehaye/telebirr-utils",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A TypeScript library for extracting transaction data from Telebirr receipt HTML files using jsdom",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsc",
-    "start": "node dist/index.js"
+    "prepublishOnly": "npm run build",
+    "test": "echo \"No tests yet\" && exit 0",
+    "start": "node dist/index.js",
+    "dev": "npx tsx src/index.ts"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "telebirr",
+    "receipt",
+    "extractor",
+    "typescript",
+    "jsdom",
+    "html-parser",
+    "transaction",
+    "ethiopia",
+    "mobile-payment"
+  ],
+  "author": "mfissehaye",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mfissehaye/telebirr-utils.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mfissehaye/telebirr-utils/issues"
+  },
+  "homepage": "https://github.com/mfissehaye/telebirr-utils#readme",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "packageManager": "pnpm@10.13.1",
   "dependencies": {
     "jsdom": "^26.1.0"

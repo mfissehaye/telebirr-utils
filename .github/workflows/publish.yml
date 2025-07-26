@@ -1,0 +1,96 @@
+name: Publish Package
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'pnpm'
+        
+    - name: Install pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: 10.13.1
+        
+    - name: Install dependencies
+      run: pnpm install
+      
+    - name: Build package
+      run: pnpm run build
+      
+    - name: Run tests
+      run: pnpm run test
+
+  publish:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        registry-url: 'https://registry.npmjs.org'
+        cache: 'pnpm'
+        
+    - name: Install pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: 10.13.1
+        
+    - name: Install dependencies
+      run: pnpm install
+      
+    - name: Build package
+      run: pnpm run build
+      
+    - name: Check if version changed
+      id: version-check
+      run: |
+        CURRENT_VERSION=$(node -p "require('./package.json').version")
+        PUBLISHED_VERSION=$(npm view @mfissehaye/telebirr-utils version 2>/dev/null || echo "0.0.0")
+        echo "current=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+        echo "published=$PUBLISHED_VERSION" >> $GITHUB_OUTPUT
+        if [ "$CURRENT_VERSION" != "$PUBLISHED_VERSION" ]; then
+          echo "changed=true" >> $GITHUB_OUTPUT
+        else
+          echo "changed=false" >> $GITHUB_OUTPUT
+        fi
+        
+    - name: Publish to npm
+      if: steps.version-check.outputs.changed == 'true'
+      run: pnpm publish --no-git-checks
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        
+    - name: Create GitHub Release
+      if: steps.version-check.outputs.changed == 'true'
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ steps.version-check.outputs.current }}
+        release_name: Release v${{ steps.version-check.outputs.current }}
+        body: |
+          Release v${{ steps.version-check.outputs.current }}
+          
+          See the [CHANGELOG](./README.md) for details.
+        draft: false
+        prerelease: false

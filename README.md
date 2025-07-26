@@ -1,4 +1,4 @@
-# Telebirr Receipt Extractor
+# @mfissehaye/telebirr-utils
 
 A TypeScript library for extracting transaction data from Telebirr receipt HTML files using jsdom. Supports both local HTML files and fetching from the Telebirr API.
 
@@ -14,7 +14,19 @@ A TypeScript library for extracting transaction data from Telebirr receipt HTML 
 ## Installation
 
 ```bash
-npm install
+npm install @mfissehaye/telebirr-utils
+```
+
+Or with pnpm:
+
+```bash
+pnpm add @mfissehaye/telebirr-utils
+```
+
+Or with yarn:
+
+```bash
+yarn add @mfissehaye/telebirr-utils
 ```
 
 ## Usage
@@ -22,7 +34,7 @@ npm install
 ### Basic Usage with Transaction Reference
 
 ```typescript
-import { getTelebirrReceipt } from './src'
+import { getTelebirrReceipt } from '@mfissehaye/telebirr-utils'
 
 // Fetch and extract data from Telebirr API
 const receiptData = await getTelebirrReceipt('CGP5Q3APB5')
@@ -33,7 +45,7 @@ console.log(receiptData)
 ### Using Mock Mode (for testing)
 
 ```typescript
-import { getTelebirrReceipt } from './src'
+import { getTelebirrReceipt } from '@mfissehaye/telebirr-utils'
 
 // Use mock data for testing (since API might not be reachable)
 const receiptData = await getTelebirrReceipt('CGP5Q3APB5', { 
@@ -47,7 +59,7 @@ console.log(receiptData)
 ### Direct HTML Processing
 
 ```typescript
-import { extractTelebirrReceiptData } from './src'
+import { extractTelebirrReceiptData } from '@mfissehaye/telebirr-utils'
 import fs from 'fs'
 
 // Read HTML file and extract data
@@ -80,19 +92,6 @@ The extractor returns a `TelebirrReceipt` object with the following fields:
 - `invoiceNumber`: The invoice/receipt number
 - `paymentChannel`: The payment channel used
 - `paymentReason`: The reason for the payment
-
-## Project Structure
-
-```
-src/
-├── index.ts                 # Main entry point and public API exports
-├── utils/
-│   ├── index.ts            # Utils module exports
-│   ├── types.ts            # TypeScript interfaces and types
-│   ├── extractors.ts       # Helper functions for HTML extraction
-│   ├── fetcher.ts          # HTTP fetching and mock functionality
-│   └── telebirrExtractor.ts # Main extraction logic
-```
 
 ## API Reference
 
@@ -154,16 +153,6 @@ Finds values in the payment details table with exact label matching.
 }
 ```
 
-## Development
-
-```bash
-# Run the example (uses mock mode)
-npx tsx src/index.ts
-
-# Type checking
-npx tsc --noEmit
-```
-
 ## Error Handling
 
 The library includes comprehensive error handling:
@@ -173,6 +162,10 @@ The library includes comprehensive error handling:
 - HTML parsing errors
 - Missing data fields (returns empty strings)
 
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
 ## License
 
-MIT 
+MIT License - see the [LICENSE](LICENSE) file for details. 
